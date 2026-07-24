@@ -37,27 +37,46 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
   return (
     <div className="animate-fade" style={{ maxWidth: '780px', margin: '2rem auto', padding: '0 1rem' }}>
       {/* Intro Hero Box */}
-      <div className="card" style={{ marginBottom: '1.75rem', backgroundColor: '#0F172A', color: '#FFFFFF', borderColor: '#1E293B' }}>
+      <div className="card" style={{
+        marginBottom: '1.75rem',
+        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF7ED 100%)',
+        border: '1.5px solid #FDBA74'
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
           <span className="badge-safety">
             <Server size={14} /> K3 Data Center PT. Sinar Powerindo Utama
           </span>
           <span className="badge-amber">Riset Skripsi URINDO</span>
         </div>
-        <h2 style={{ fontSize: '1.65rem', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.3 }}>
-          Selamat Datang di Platform <span style={{ color: '#10B981' }}>ErgoTech K3</span>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', lineHeight: 1.3, color: '#0F172A' }}>
+          Selamat Datang di Platform <span style={{
+            background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>ErgoTech K3</span>
         </h2>
-        <p style={{ fontSize: '0.95rem', color: '#94A3B8', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '0.95rem', color: '#475569', lineHeight: 1.6 }}>
           Platform interaktif promosi K3 & edukasi manual handling pengangkatan <i>server cabinet</i> (15-30 kg) untuk pencegahan bahaya <i>Musculoskeletal Disorders</i> (MSDs).
         </p>
       </div>
 
       {/* Main Registration & Informed Consent Card */}
       <div className="card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.5rem', borderBottom: '1px solid #E2E8F0', paddingBottom: '1rem' }}>
-          <UserCheck color="#059669" size={24} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '1px solid #FED7AA', paddingBottom: '1rem' }}>
+          <div style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
+            color: '#FFFFFF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <UserCheck size={22} />
+          </div>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0F172A' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A' }}>
               Identitas Responden & Persetujuan Penelitian
             </h3>
             <p style={{ fontSize: '0.85rem', color: '#64748B' }}>
@@ -85,8 +104,8 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
             {/* Nama Lengkap */}
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                Nama Lengkap / Inisial Teknisi <span style={{ color: '#EF4444' }}>*</span>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                Nama Lengkap / Inisial Teknisi <span style={{ color: '#EA580C' }}>*</span>
               </label>
               <input
                 type="text"
@@ -97,16 +116,17 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
                   width: '100%',
                   padding: '0.75rem 1rem',
                   borderRadius: '8px',
-                  border: '1px solid #CBD5E1',
+                  border: '1.5px solid #FDBA74',
                   fontSize: '0.95rem',
-                  outline: 'none'
+                  outline: 'none',
+                  backgroundColor: '#FFFFFF'
                 }}
               />
             </div>
 
             {/* ID Teknisi */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
                 ID / NIM Teknisi (Opsional)
               </label>
               <input
@@ -118,17 +138,18 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
                   width: '100%',
                   padding: '0.75rem 1rem',
                   borderRadius: '8px',
-                  border: '1px solid #CBD5E1',
+                  border: '1.5px solid #CBD5E1',
                   fontSize: '0.95rem',
-                  outline: 'none'
+                  outline: 'none',
+                  backgroundColor: '#FFFFFF'
                 }}
               />
             </div>
 
             {/* Kategori Usia */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                Kategori Usia <span style={{ color: '#EF4444' }}>*</span>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                Kategori Usia <span style={{ color: '#EA580C' }}>*</span>
               </label>
               <select
                 value={ageGroup}
@@ -137,7 +158,7 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
                   width: '100%',
                   padding: '0.75rem 1rem',
                   borderRadius: '8px',
-                  border: '1px solid #CBD5E1',
+                  border: '1.5px solid #FDBA74',
                   fontSize: '0.95rem',
                   outline: 'none',
                   backgroundColor: '#FFFFFF'
@@ -150,8 +171,8 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
 
             {/* Masa Kerja */}
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                Masa Kerja Operasional Server Room <span style={{ color: '#EF4444' }}>*</span>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                Masa Kerja Operasional Server Room <span style={{ color: '#EA580C' }}>*</span>
               </label>
               <select
                 value={workDurationGroup}
@@ -160,7 +181,7 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
                   width: '100%',
                   padding: '0.75rem 1rem',
                   borderRadius: '8px',
-                  border: '1px solid #CBD5E1',
+                  border: '1.5px solid #FDBA74',
                   fontSize: '0.95rem',
                   outline: 'none',
                   backgroundColor: '#FFFFFF'
@@ -174,14 +195,14 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
 
           {/* Informed Consent Box */}
           <div style={{
-            backgroundColor: '#F8FAFC',
-            border: '1px solid #E2E8F0',
+            backgroundColor: '#FFF7ED',
+            border: '1.5px solid #FDBA74',
             borderRadius: '10px',
             padding: '1.25rem',
             marginBottom: '1.75rem'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#0F172A', fontWeight: 700, fontSize: '0.95rem' }}>
-              <FileText size={18} color="#059669" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#0F172A', fontWeight: 800, fontSize: '0.95rem' }}>
+              <FileText size={18} color="#EA580C" />
               <span>Lembar Informed Consent (Etika Penelitian LPPM URINDO)</span>
             </div>
             <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5, marginBottom: '0.85rem' }}>
@@ -192,9 +213,9 @@ export const DemographicsForm: React.FC<DemographicsFormProps> = ({ onSubmit }) 
                 type="checkbox"
                 checked={consented}
                 onChange={(e) => setConsented(e.target.checked)}
-                style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#059669' }}
+                style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#EA580C' }}
               />
-              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0F172A' }}>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0F172A' }}>
                 Saya memahami & menyetujui Lembar Persetujuan Responden (Informed Consent).
               </span>
             </label>

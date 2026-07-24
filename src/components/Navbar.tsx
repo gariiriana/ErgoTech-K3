@@ -24,14 +24,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
 
   return (
     <header style={{
-      backgroundColor: '#0F172A',
-      color: '#FFFFFF',
-      borderBottom: '1px solid #1E293B',
+      backgroundColor: '#FFFFFF',
+      color: '#0F172A',
+      borderBottom: '2px solid #FED7AA',
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+      boxShadow: '0 4px 20px rgba(245, 158, 11, 0.08)'
     }}>
+      {/* Top Gradient Orange Accent Line */}
+      <div style={{
+        height: '4px',
+        background: 'linear-gradient(90deg, #F59E0B 0%, #EA580C 50%, #D97706 100%)'
+      }}></div>
+
       {/* Top Corporate Branding Bar */}
       <div style={{
         maxWidth: '1200px',
@@ -51,7 +57,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+            border: '1px solid #FED7AA',
+            boxShadow: '0 2px 8px rgba(245, 158, 11, 0.1)'
           }}>
             <img 
               src="/logo-powerindo.png" 
@@ -59,14 +66,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
               style={{ height: '36px', objectFit: 'contain' }}
             />
           </div>
-          <div style={{ borderLeft: '1px solid #334155', paddingLeft: '1rem' }}>
+          <div style={{ borderLeft: '2px solid #FED7AA', paddingLeft: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Shield size={20} color="#10B981" />
-              <h1 style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0 }}>
-                ErgoTech <span style={{ color: '#10B981' }}>K3</span>
+              <Shield size={22} color="#EA580C" />
+              <h1 style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0, color: '#0F172A' }}>
+                ErgoTech <span style={{
+                  background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>K3</span>
               </h1>
             </div>
-            <p style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '1px' }}>
+            <p style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '1px', fontWeight: 500 }}>
               Manual Handling & Ergonomic Safety — PT. Sinar Powerindo Utama
             </p>
           </div>
@@ -75,8 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
         {/* Right Status Controls & Admin Trigger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {respondentName && (
-            <div style={{ fontSize: '0.85rem', color: '#E2E8F0', fontWeight: 500 }}>
-              Halo, <span style={{ color: '#10B981', fontWeight: 700 }}>{respondentName}</span>
+            <div style={{ fontSize: '0.85rem', color: '#334155', fontWeight: 600 }}>
+              Halo, <span style={{ color: '#EA580C', fontWeight: 800 }}>{respondentName}</span>
             </div>
           )}
 
@@ -84,21 +95,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
           <button
             onClick={onOpenAdmin}
             style={{
-              backgroundColor: 'transparent',
-              border: '1px solid #334155',
-              color: '#94A3B8',
-              padding: '0.45rem 0.85rem',
-              borderRadius: '6px',
+              backgroundColor: '#FFF7ED',
+              border: '1.5px solid #FDBA74',
+              color: '#EA580C',
+              padding: '0.45rem 0.95rem',
+              borderRadius: '8px',
               fontSize: '0.8rem',
-              fontWeight: 600,
+              fontWeight: 700,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.4rem',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 6px rgba(234, 88, 12, 0.1)'
             }}
-            onMouseOver={(e) => (e.currentTarget.style.color = '#FFFFFF', e.currentTarget.style.borderColor = '#64748B')}
-            onMouseOut={(e) => (e.currentTarget.style.color = '#94A3B8', e.currentTarget.style.borderColor = '#334155')}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#F59E0B', e.currentTarget.style.color = '#FFFFFF')}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#FFF7ED', e.currentTarget.style.color = '#EA580C')}
             title="Akses Dashboard Peneliti / Admin"
           >
             <Key size={14} />
@@ -110,9 +122,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
       {/* Steps Navigation Progress Line */}
       {currentStep !== 'admin' && (
         <div style={{
-          backgroundColor: '#020617',
-          borderTop: '1px solid #1E293B',
-          padding: '0.6rem 1.5rem'
+          backgroundColor: '#FFF7ED',
+          borderTop: '1px solid #FFEDD5',
+          padding: '0.65rem 1.5rem'
         }}>
           <div style={{
             maxWidth: '1200px',
@@ -134,26 +146,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    fontSize: '0.8rem',
-                    fontWeight: isCurrent ? 700 : isCompleted ? 600 : 400,
-                    color: isCurrent ? '#10B981' : isCompleted ? '#CBD5E1' : '#475569',
+                    fontSize: '0.825rem',
+                    fontWeight: isCurrent ? 800 : isCompleted ? 700 : 500,
+                    color: isCurrent ? '#EA580C' : isCompleted ? '#C2410C' : '#94A3B8',
                     whiteSpace: 'nowrap'
                   }}
                 >
                   {isCompleted ? (
-                    <CheckCircle size={15} color="#10B981" />
+                    <CheckCircle size={16} color="#EA580C" />
                   ) : (
                     <span style={{
-                      width: '18px',
-                      height: '18px',
+                      width: '20px',
+                      height: '20px',
                       borderRadius: '50%',
-                      backgroundColor: isCurrent ? '#10B981' : '#1E293B',
+                      background: isCurrent ? 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)' : '#E2E8F0',
                       color: isCurrent ? '#FFFFFF' : '#64748B',
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.7rem',
-                      fontWeight: 700
+                      fontSize: '0.75rem',
+                      fontWeight: 800
                     }}>
                       {idx + 1}
                     </span>

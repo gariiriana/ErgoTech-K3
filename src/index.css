@@ -1,25 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
+  /* Company Brand Colors: Warm Golden Orange & Clean Slate */
+  --primary-orange: #EA580C;
+  --amber-orange: #F59E0B;
+  --gold-warm: #D97706;
+  --amber-gradient: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+  --amber-gradient-hover: linear-gradient(135deg, #D97706 0%, #C2410C 100%);
+  --bg-orange-soft: #FFF7ED;
+  --bg-amber-light: #FEF3C7;
+  
   --primary-navy: #0F172A;
   --navy-light: #1E293B;
   --emerald-main: #059669;
-  --emerald-hover: #047857;
-  --emerald-light: #D1FAE5;
-  --amber-accent: #D97706;
-  --amber-light: #FEF3C7;
-  --bg-slate: #F8FAFC;
+  
+  --bg-clean: #FAFAFA;
   --card-bg: #FFFFFF;
+  --border-amber: #FED7AA;
   --border-slate: #E2E8F0;
+  
   --text-dark: #0F172A;
   --text-muted: #64748B;
-  --text-light: #94A3B8;
+  --text-orange: #C2410C;
+  
   --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.12);
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  
+  --shadow-sm: 0 2px 6px rgba(245, 158, 11, 0.06);
+  --shadow-md: 0 10px 30px -5px rgba(234, 88, 12, 0.08);
+  --shadow-lg: 0 20px 40px -10px rgba(15, 23, 42, 0.12);
+  
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -31,7 +42,8 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-slate);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF7ED 50%, #FAFAFA 100%);
+  min-height: 100vh;
   color: var(--text-dark);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -40,11 +52,11 @@ body {
 /* Glass & Card Utilities */
 .card {
   background: var(--card-bg);
-  border: 1px solid var(--border-slate);
+  border: 1px solid var(--border-amber);
   border-radius: var(--radius-md);
   padding: 1.75rem;
   box-shadow: var(--shadow-md);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
@@ -52,32 +64,34 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--emerald-main);
+  background: var(--amber-gradient);
   color: #ffffff;
-  font-weight: 600;
-  padding: 0.85rem 1.75rem;
+  font-weight: 700;
+  padding: 0.85rem 1.85rem;
   border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   font-size: 1rem;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: var(--emerald-hover);
-  transform: translateY(-1px);
+  background: var(--amber-gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
 }
 
 .btn-secondary {
   background-color: #ffffff;
-  color: var(--primary-navy);
-  font-weight: 600;
-  padding: 0.85rem 1.75rem;
+  color: var(--text-orange);
+  font-weight: 700;
+  padding: 0.85rem 1.85rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-slate);
+  border: 1.5px solid var(--border-amber);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -87,30 +101,32 @@ body {
 }
 
 .btn-secondary:hover {
-  background-color: var(--bg-slate);
-  border-color: var(--primary-navy);
+  background-color: var(--bg-orange-soft);
+  border-color: var(--primary-orange);
+  color: var(--primary-orange);
 }
 
 .badge-safety {
-  background-color: var(--emerald-light);
-  color: var(--emerald-main);
-  font-weight: 700;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FFEDD5 100%);
+  color: var(--primary-orange);
+  font-weight: 800;
   font-size: 0.8rem;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 50px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  border: 1px solid #FDBA74;
 }
 
 .badge-amber {
-  background-color: var(--amber-light);
-  color: var(--amber-accent);
+  background-color: var(--bg-amber-light);
+  color: var(--gold-warm);
   font-weight: 700;
   font-size: 0.8rem;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 50px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -131,12 +147,12 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-slate);
+  background: var(--bg-clean);
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #FDBA74;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #F59E0B;
 }
