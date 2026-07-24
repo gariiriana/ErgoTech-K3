@@ -1,231 +1,266 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, CheckCircle, ShieldAlert, Activity, ArrowRight, Zap, Info, Server } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle2, ShieldAlert, Activity, ArrowRight, Zap, Check, AlertTriangle, Video, HeartPulse, Sparkles, FileCheck, ShieldCheck, Truck, AlertCircle } from 'lucide-react';
 
 interface EducationalModulesProps {
   onCompleteModules: () => void;
 }
 
 export const EducationalModules: React.FC<EducationalModulesProps> = ({ onCompleteModules }) => {
-  const [activeTab, setActiveTab] = useState<'squat' | 'hiradc' | 'stretching'>('squat');
+  const [activeTab, setActiveTab] = useState<'squat' | 'hiradc' | 'sop'>('squat');
   const [completedTabs, setCompletedTabs] = useState<string[]>([]);
 
-  // Stretching Timer State
-  const [currentExercise, setCurrentExercise] = useState(0);
-  const [timerSeconds, setTimerSeconds] = useState(30);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-  const exercises = [
-    { title: "Peregangan Leher (Neck Stretch)", desc: "Tengadahkan leher ke atas perlahan dan miringkan ke kanan-kiri untuk merelaksasi otot trapezius.", icon: "🧘‍♂️" },
-    { title: "Peregangan Bahu & Dada (Shoulder Roll)", desc: "Putar bahu ke belakang secara melingkar untuk membendung ketegangan otot bahu.", icon: "💪" },
-    { title: "Peregangan Punggung Bawah (Lumbar Extension)", desc: "Letakkan tangan di pinggang dan dorong pinggul sedikit ke depan sambil membusungkan dada.", icon: "🧍‍♂️" },
-    { title: "Peregangan Pergelangan Tangan (Wrist Flexion)", desc: "Luruskan lengan ke depan, tarik jemari ke belakang untuk merelaksasi otot flexor pergelangan.", icon: "✋" }
+  const hiradcItems = [
+    {
+      activity: "Cabinet Mounting Server (15-30 kg)",
+      hazard: "Postur membungkuk & menjangkau jauh saat pasang unit.",
+      initialRisk: "HIGH",
+      control: "Edukasi ergonomi via website (squat style) & peregangan.",
+      residualRisk: "LOW"
+    },
+    {
+      activity: "Pemindahan Baterai UPS Cadangan",
+      hazard: "Beban fisik berlebih (overexertion) manual handling.",
+      initialRisk: "HIGH",
+      control: "Penggunaan lift mekanik server & team lifting.",
+      residualRisk: "MEDIUM"
+    },
+    {
+      activity: "Penarikan Kabel Optik Floor",
+      hazard: "Postur jongkok statis & janggal durasi lama.",
+      initialRisk: "MEDIUM",
+      control: "Sosialisasi rotasi kerja & peregangan berkala 3-5m.",
+      residualRisk: "LOW"
+    }
   ];
 
-  // Timer Effect
-  useEffect(() => {
-    let interval: any = null;
-    if (isTimerRunning && timerSeconds > 0) {
-      interval = setInterval(() => {
-        setTimerSeconds(prev => prev - 1);
-      }, 1000);
-    } else if (timerSeconds === 0) {
-      setIsTimerRunning(false);
-      if (currentExercise < exercises.length - 1) {
-        setCurrentExercise(prev => prev + 1);
-        setTimerSeconds(30);
-      }
-    }
-    return () => clearInterval(interval);
-  }, [isTimerRunning, timerSeconds, currentExercise]);
-
-  const handleTabChange = (tab: 'squat' | 'hiradc' | 'stretching') => {
+  const handleTabChange = (tab: 'squat' | 'hiradc' | 'sop') => {
     setActiveTab(tab);
     if (!completedTabs.includes(tab)) {
       setCompletedTabs([...completedTabs, tab]);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const markModuleDone = (tab: string) => {
     if (!completedTabs.includes(tab)) {
       setCompletedTabs([...completedTabs, tab]);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const allCompleted = completedTabs.includes('squat') && completedTabs.includes('hiradc') && completedTabs.includes('stretching');
-
   return (
-    <div className="animate-fade" style={{ maxWidth: '950px', margin: '2rem auto', padding: '0 1rem' }}>
-      {/* Top Banner */}
-      <div className="card" style={{ marginBottom: '1.5rem', backgroundColor: '#0F172A', color: '#FFFFFF', borderColor: '#1E293B' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
-          <span className="badge-safety">TAHAP 3: MODUL EDUKASI K3 INTERAKTIF</span>
-        </div>
-        <h2 style={{ fontSize: '1.55rem', fontWeight: 800 }}>
-          Panduan Manual Handling & Ergonomi <span style={{ color: '#10B981' }}>ErgoTech K3</span>
+    <div className="animate-fade" style={{ maxWidth: '900px', margin: '1.25rem auto', padding: '0 0.85rem' }}>
+      {/* Header Banner */}
+      <div style={{ marginBottom: '1.25rem' }}>
+        <div className="badge-safety" style={{ marginBottom: '0.25rem' }}>TAHAP 3: MODUL EDUKASI K3 INTERAKTIF</div>
+        <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0F172A' }}>
+          Panduan Manual Handling & Ergonomi <span style={{ color: '#EA580C' }}>ErgoTech K3</span>
         </h2>
-        <p style={{ fontSize: '0.9rem', color: '#94A3B8', marginTop: '0.25rem' }}>
-          Pelajari 3 modul interaktif di bawah ini untuk memahami teknik pengangkatan aman, HIRADC K3, dan peregangan otot sebelum masuk ke tahap Post-Test.
+        <p style={{ fontSize: '0.85rem', color: '#64748B', marginTop: '2px' }}>
+          Pelajari 3 modul ergonomi di bawah ini sebelum melanjutkan ke tahap Post-Test.
         </p>
       </div>
 
-      {/* Navigation Tabs */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+      {/* Segmented Tab Bar - Guaranteed Single Line Text */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        backgroundColor: '#F1F5F9',
+        borderRadius: '8px',
+        padding: '3px',
+        marginBottom: '1.25rem',
+        border: '1px solid #E2E8F0'
+      }}>
         <button
+          type="button"
           onClick={() => handleTabChange('squat')}
           style={{
-            flex: 1,
-            padding: '1rem 1.25rem',
-            borderRadius: '10px',
-            border: activeTab === 'squat' ? '2px solid #059669' : '1px solid #CBD5E1',
-            backgroundColor: activeTab === 'squat' ? '#059669' : '#FFFFFF',
-            color: activeTab === 'squat' ? '#FFFFFF' : '#334155',
-            fontWeight: 700,
-            fontSize: '0.9rem',
+            backgroundColor: activeTab === 'squat' ? '#FFFFFF' : 'transparent',
+            color: activeTab === 'squat' ? '#EA580C' : '#64748B',
+            fontWeight: activeTab === 'squat' ? 700 : 500,
+            fontSize: '0.775rem',
+            padding: '0.55rem 0.15rem',
+            borderRadius: '6px',
+            border: 'none',
+            boxShadow: activeTab === 'squat' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem',
-            boxShadow: activeTab === 'squat' ? '0 4px 12px rgba(5, 150, 105, 0.25)' : 'none',
-            transition: 'all 0.2s ease'
+            gap: '0.25rem',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            transition: 'all 0.15s ease'
           }}
         >
-          <Zap size={18} />
-          <span>1. Squat vs Stoop Style</span>
-          {completedTabs.includes('squat') && <CheckCircle size={16} color={activeTab === 'squat' ? '#FFFFFF' : '#10B981'} />}
+          <Zap size={14} color={activeTab === 'squat' ? '#EA580C' : '#94A3B8'} style={{ flexShrink: 0 }} />
+          <span style={{ whiteSpace: 'nowrap' }}>1. Squat</span>
         </button>
 
         <button
+          type="button"
           onClick={() => handleTabChange('hiradc')}
           style={{
-            flex: 1,
-            padding: '1rem 1.25rem',
-            borderRadius: '10px',
-            border: activeTab === 'hiradc' ? '2px solid #059669' : '1px solid #CBD5E1',
-            backgroundColor: activeTab === 'hiradc' ? '#059669' : '#FFFFFF',
-            color: activeTab === 'hiradc' ? '#FFFFFF' : '#334155',
-            fontWeight: 700,
-            fontSize: '0.9rem',
+            backgroundColor: activeTab === 'hiradc' ? '#FFFFFF' : 'transparent',
+            color: activeTab === 'hiradc' ? '#EA580C' : '#64748B',
+            fontWeight: activeTab === 'hiradc' ? 700 : 500,
+            fontSize: '0.775rem',
+            padding: '0.55rem 0.15rem',
+            borderRadius: '6px',
+            border: 'none',
+            boxShadow: activeTab === 'hiradc' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem',
-            boxShadow: activeTab === 'hiradc' ? '0 4px 12px rgba(5, 150, 105, 0.25)' : 'none',
-            transition: 'all 0.2s ease'
+            gap: '0.25rem',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            transition: 'all 0.15s ease'
           }}
         >
-          <ShieldAlert size={18} />
-          <span>2. Matriks HIRADC Data Center</span>
-          {completedTabs.includes('hiradc') && <CheckCircle size={16} color={activeTab === 'hiradc' ? '#FFFFFF' : '#10B981'} />}
+          <ShieldAlert size={14} color={activeTab === 'hiradc' ? '#EA580C' : '#94A3B8'} style={{ flexShrink: 0 }} />
+          <span style={{ whiteSpace: 'nowrap' }}>2. HIRADC</span>
         </button>
 
         <button
-          onClick={() => handleTabChange('stretching')}
+          type="button"
+          onClick={() => handleTabChange('sop')}
           style={{
-            flex: 1,
-            padding: '1rem 1.25rem',
-            borderRadius: '10px',
-            border: activeTab === 'stretching' ? '2px solid #059669' : '1px solid #CBD5E1',
-            backgroundColor: activeTab === 'stretching' ? '#059669' : '#FFFFFF',
-            color: activeTab === 'stretching' ? '#FFFFFF' : '#334155',
-            fontWeight: 700,
-            fontSize: '0.9rem',
+            backgroundColor: activeTab === 'sop' ? '#FFFFFF' : 'transparent',
+            color: activeTab === 'sop' ? '#EA580C' : '#64748B',
+            fontWeight: activeTab === 'sop' ? 700 : 500,
+            fontSize: '0.775rem',
+            padding: '0.55rem 0.15rem',
+            borderRadius: '6px',
+            border: 'none',
+            boxShadow: activeTab === 'sop' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem',
-            boxShadow: activeTab === 'stretching' ? '0 4px 12px rgba(5, 150, 105, 0.25)' : 'none',
-            transition: 'all 0.2s ease'
+            gap: '0.25rem',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            transition: 'all 0.15s ease'
           }}
         >
-          <Activity size={18} />
-          <span>3. Interactive Stretching Assistant</span>
-          {completedTabs.includes('stretching') && <CheckCircle size={16} color={activeTab === 'stretching' ? '#FFFFFF' : '#10B981'} />}
+          <FileCheck size={14} color={activeTab === 'sop' ? '#EA580C' : '#94A3B8'} style={{ flexShrink: 0 }} />
+          <span style={{ whiteSpace: 'nowrap' }}>3. SOP K3</span>
         </button>
       </div>
 
       {/* TAB 1: SQUAT STYLE VS STOOP STYLE */}
       {activeTab === 'squat' && (
         <div className="card animate-fade">
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>
-            Simulasi Postur Angkat: Squat Style (SAFE) vs Stoop Style (UNSAFE)
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.35rem' }}>
+            Simulasi Postur WorkSafeBC: Lifting in the Workplace (Squat Style vs Stoop Style)
           </h3>
-          <p style={{ fontSize: '0.9rem', color: '#64748B', marginBottom: '1.5rem' }}>
-            Teknisi manual handling di PT. Sinar Powerindo Utama sering mengangkat <i>server cabinet</i> (15-30 kg). Membingkukkan tulang belakang (Stoop Style) memicu gaya tekan 300+ kg pada lumbar disk L5/S1.
+          <p style={{ fontSize: '0.825rem', color: '#64748B', marginBottom: '1rem', lineHeight: 1.5 }}>
+            Prinsip Ergonomi WorkSafeBC: Mengurangi risiko cedera otot tulang belakang (Low Back Pain / HNP) saat pengangkatan <i>manual handling server cabinet</i> (15–30 kg) di tempat kerja.
           </p>
 
-          {/* Side-by-Side Visual Interactive Comparison Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.75rem' }}>
-            {/* SAFE: Squat Style */}
-            <div style={{
-              border: '2px solid #10B981',
-              backgroundColor: '#ECFDF5',
-              borderRadius: '12px',
-              padding: '1.25rem'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <span style={{ backgroundColor: '#059669', color: '#FFFFFF', fontWeight: 800, padding: '0.35rem 0.75rem', borderRadius: '50px', fontSize: '0.8rem' }}>
-                  ✓ AMAN (SAFE LIFTING)
-                </span>
-                <span style={{ fontWeight: 700, color: '#047857' }}>Squat Style</span>
-              </div>
-
-              {/* Graphic Representation */}
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', marginBottom: '1rem', border: '1px solid #A7F3D0' }}>
-                <div style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>🏋️‍♂️</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#065F46' }}>
-                  Tulang Belakang Lurus + Tekuk Lutut
-                </div>
-              </div>
-
-              <ul style={{ fontSize: '0.875rem', color: '#065F46', lineHeight: 1.6, paddingLeft: '1.25rem' }}>
-                <li>Lutut ditekuk membentuk sudut 90 derajat.</li>
-                <li>Tulang belakang tetap dalam aksis tegak/lurus.</li>
-                <li>Beban ditahan oleh otot paha & kaki yang kuat.</li>
-                <li>Beban dipegang sedekat mungkin ke perut/dada.</li>
-              </ul>
+          {/* WorkSafeBC Video Player Embed (zss9jRW4oWw) */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', fontWeight: 700, color: '#EA580C', marginBottom: '0.4rem' }}>
+              <Video size={16} />
+              <span>Video Edukasi WorkSafeBC: Lifting in the Workplace (Reducing Lifting Risks)</span>
             </div>
 
-            {/* UNSAFE: Stoop Style */}
             <div style={{
-              border: '2px solid #EF4444',
-              backgroundColor: '#FEF2F2',
-              borderRadius: '12px',
-              padding: '1.25rem'
+              position: 'relative',
+              paddingBottom: '56.25%',
+              height: 0,
+              overflow: 'hidden',
+              borderRadius: '8px',
+              border: '1px solid #E2E8F0',
+              backgroundColor: '#0F172A'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <span style={{ backgroundColor: '#DC2626', color: '#FFFFFF', fontWeight: 800, padding: '0.35rem 0.75rem', borderRadius: '50px', fontSize: '0.8rem' }}>
-                  ✕ BAHAYA (UNSAFE LIFTING)
-                </span>
-                <span style={{ fontWeight: 700, color: '#B91C1C' }}>Stoop Style</span>
+              <iframe
+                src="https://www.youtube.com/embed/zss9jRW4oWw?rel=0"
+                title="Lifting in the Workplace | WorkSafeBC"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 'none'
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Kesimpulan Video & Pesan Nasihat K3 Teknisi */}
+          <div className="comparison-grid-2col">
+            {/* Box 1: Kesimpulan Video WorkSafeBC */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderTop: '3px solid #059669',
+              borderRadius: '8px',
+              padding: '1.1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', color: '#059669', fontWeight: 800, fontSize: '0.9rem' }}>
+                <CheckCircle2 size={18} />
+                <span>Kesimpulan Utama Video WorkSafeBC</span>
               </div>
 
-              {/* Graphic Representation */}
-              <div style={{ backgroundColor: '#FFFFFF', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', marginBottom: '1rem', border: '1px solid #FCA5A5' }}>
-                <div style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>🙇‍♂️</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#991B1B' }}>
-                  Punggung Membungkukkan & Memutar Body
+              <div style={{ fontSize: '0.825rem', color: '#334155', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Check size={16} color="#059669" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>Prioritaskan Area Power Zone:</strong> Selalu angkat beban di zona antara paha tengah dan dada agar beban aksial pada spinal disk tetap minim.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Check size={16} color="#059669" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>Kekuatan Otot Kaki (Squat Style):</strong> Jaga punggung tetap lurus, tekuk lutut 90°, dan gunakan dorongan otot paha agar pinggang tidak menanggung 300+ kg tekanan.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Check size={16} color="#059669" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>Rencanakan Pengangkatan (Plan the Lift):</strong> Periksa berat beban, pastikan jalur bebas hambatan, dan hindari gerakan memutar badan (twisting).</span>
                 </div>
               </div>
+            </div>
 
-              <ul style={{ fontSize: '0.875rem', color: '#991B1B', lineHeight: 1.6, paddingLeft: '1.25rem' }}>
-                <li>Punggung membungkuk ekstrem saat menjangkau beban.</li>
-                <li>Kaki lurus statis sehingga beban bertumpu di pinggang.</li>
-                <li>Memicu kecederaan diskus intervertebralis (HNP).</li>
-                <li>Penyebab utama Low Back Pain (LBP) kronis.</li>
-              </ul>
+            {/* Box 2: Pesan Nasihat & Imbauan Keselamatan Teknisi */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderTop: '3px solid #EA580C',
+              borderRadius: '8px',
+              padding: '1.1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', color: '#EA580C', fontWeight: 800, fontSize: '0.9rem' }}>
+                <HeartPulse size={18} />
+                <span>Pesan Nasihat & Imbauan K3 Teknisi</span>
+              </div>
+
+              <div style={{ fontSize: '0.825rem', color: '#334155', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Sparkles size={16} color="#EA580C" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>"Tulang Belakang Anda Tidak Memiliki Suku Cadang":</strong> Cedera saraf kejepit (HNP) dan Low Back Pain bersifat permanen. Jaga kesehatan punggung Anda demi masa depan keluarga.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Sparkles size={16} color="#EA580C" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>Jangan Ragu Minta Bantuan (Team Lifting):</strong> Jangan mengorbankan diri hanya karena ingin cepat selesai. Gunakan trolley hidrolik jika beban server &gt;25 kg.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <Sparkles size={16} color="#EA580C" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong>Patuhi SOP & Sempatkan Micro-Break:</strong> Luangkan waktu 3-5 menit untuk peregangan otot di sela jam kerja demi menjaga produktivitas jangka panjang.</span>
+                </div>
+              </div>
             </div>
           </div>
 
           <button
             onClick={() => { markModuleDone('squat'); setActiveTab('hiradc'); }}
             className="btn-primary"
-            style={{ width: '100%', justifyContent: 'center' }}
+            style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}
           >
             <span>Pahami Modul Ini & Lanjut ke Matriks HIRADC K3</span>
-            <ArrowRight size={18} />
+            <ArrowRight size={16} />
           </button>
         </div>
       )}
@@ -233,174 +268,166 @@ export const EducationalModules: React.FC<EducationalModulesProps> = ({ onComple
       {/* TAB 2: HIRADC MATRIX DATA CENTER */}
       {activeTab === 'hiradc' && (
         <div className="card animate-fade">
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>
-            Identifikasi Bahaya & Matriks HIRADC Manual Handling Data Center
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.35rem' }}>
+            Matriks Pengendalian Risiko HIRADC (ISO 45001:2018)
           </h3>
-          <p style={{ fontSize: '0.9rem', color: '#64748B', marginBottom: '1.5rem' }}>
-            Berikut adalah dokumen HIRADC (ISO 45001:2018) pengendalian risiko K3 manual handling di area operasional <i>server room</i> PT. Sinar Powerindo Utama.
+          <p style={{ fontSize: '0.825rem', color: '#64748B', marginBottom: '1.25rem' }}>
+            Dokumen keselamatan kerja manual handling area Server Room PT. Sinar Powerindo Utama:
           </p>
 
-          <div style={{ overflowX: 'auto', marginBottom: '1.5rem' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'left' }}>
+          {/* Desktop Table View */}
+          <div className="steps-desktop" style={{ flexDirection: 'column', marginBottom: '1.25rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.825rem', textAlign: 'left' }}>
               <thead>
-                <tr style={{ backgroundColor: '#0F172A', color: '#FFFFFF' }}>
-                  <th style={{ padding: '0.85rem 1rem', border: '1px solid #334155' }}>Aktivitas Kerja</th>
-                  <th style={{ padding: '0.85rem 1rem', border: '1px solid #334155' }}>Potensi Bahaya</th>
-                  <th style={{ padding: '0.85rem 1rem', border: '1px solid #334155' }}>Risiko Awal</th>
-                  <th style={{ padding: '0.85rem 1rem', border: '1px solid #334155' }}>Langkah Kontrol Baru</th>
-                  <th style={{ padding: '0.85rem 1rem', border: '1px solid #334155' }}>Risiko Sisa</th>
+                <tr style={{ backgroundColor: '#F8FAFC', color: '#334155', borderBottom: '2px solid #E2E8F0' }}>
+                  <th style={{ padding: '0.65rem 0.75rem' }}>Aktivitas Kerja</th>
+                  <th style={{ padding: '0.65rem 0.75rem' }}>Potensi Bahaya</th>
+                  <th style={{ padding: '0.65rem 0.75rem' }}>Risiko Awal</th>
+                  <th style={{ padding: '0.65rem 0.75rem' }}>Langkah Pengendalian</th>
+                  <th style={{ padding: '0.65rem 0.75rem' }}>Risiko Sisa</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ backgroundColor: '#FFFFFF' }}>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0', fontWeight: 600 }}>Cabinet Mounting Server (15-30 kg)</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Postur membungkuk & menjangkau jauh saat pasang unit.</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>HIGH</span>
-                  </td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Edukasi ergonomi via website (squat style) & peregangan.</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>LOW</span>
-                  </td>
-                </tr>
-                <tr style={{ backgroundColor: '#F8FAFC' }}>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0', fontWeight: 600 }}>Pemindahan Baterai UPS Cadangan</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Beban fisik berlebih (overexertion) manual handling.</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#FEE2E2', color: '#991B1B', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>HIGH</span>
-                  </td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Penggunaan lift mekanik server & pengangkatan berpasangan (Team Lifting).</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>MEDIUM</span>
-                  </td>
-                </tr>
-                <tr style={{ backgroundColor: '#FFFFFF' }}>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0', fontWeight: 600 }}>Penarikan Kabel Optik Floor</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Postur jongkok statis & janggal durasi lama.</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>MEDIUM</span>
-                  </td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>Sosialisasi rotasi kerja & video peregangan berkala 3-5 menit.</td>
-                  <td style={{ padding: '0.85rem 1rem', border: '1px solid #E2E8F0' }}>
-                    <span style={{ backgroundColor: '#D1FAE5', color: '#065F46', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>LOW</span>
-                  </td>
-                </tr>
+                {hiradcItems.map((item, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                    <td style={{ padding: '0.65rem 0.75rem', fontWeight: 600 }}>{item.activity}</td>
+                    <td style={{ padding: '0.65rem 0.75rem', color: '#475569' }}>{item.hazard}</td>
+                    <td style={{ padding: '0.65rem 0.75rem' }}>
+                      <span style={{ backgroundColor: item.initialRisk === 'HIGH' ? '#FEE2E2' : '#FEF3C7', color: item.initialRisk === 'HIGH' ? '#991B1B' : '#92400E', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: '4px', fontSize: '0.7rem' }}>
+                        {item.initialRisk}
+                      </span>
+                    </td>
+                    <td style={{ padding: '0.65rem 0.75rem', color: '#475569' }}>{item.control}</td>
+                    <td style={{ padding: '0.65rem 0.75rem' }}>
+                      <span style={{ backgroundColor: item.residualRisk === 'LOW' ? '#D1FAE5' : '#FEF3C7', color: item.residualRisk === 'LOW' ? '#065F46' : '#92400E', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: '4px', fontSize: '0.7rem' }}>
+                        {item.residualRisk}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
 
-          <button
-            onClick={() => { markModuleDone('hiradc'); setActiveTab('stretching'); }}
-            className="btn-primary"
-            style={{ width: '100%', justifyContent: 'center' }}
-          >
-            <span>Pahami HIRADC & Lanjut ke Asisten Peregangan Otot</span>
-            <ArrowRight size={18} />
-          </button>
-        </div>
-      )}
+          {/* Mobile Zero-Scroll Compact Card List */}
+          <div className="steps-mobile" style={{ flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
+            {hiradcItems.map((item, idx) => (
+              <div key={idx} style={{
+                width: '100%',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E2E8F0',
+                borderRadius: '8px',
+                padding: '0.85rem'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0F172A' }}>{item.activity}</div>
+                  <div style={{ display: 'flex', gap: '0.3rem', fontSize: '0.65rem' }}>
+                    <span style={{ backgroundColor: item.initialRisk === 'HIGH' ? '#FEE2E2' : '#FEF3C7', color: item.initialRisk === 'HIGH' ? '#991B1B' : '#92400E', fontWeight: 700, padding: '0.15rem 0.35rem', borderRadius: '4px' }}>
+                      Awal: {item.initialRisk}
+                    </span>
+                    <span style={{ backgroundColor: item.residualRisk === 'LOW' ? '#D1FAE5' : '#FEF3C7', color: item.residualRisk === 'LOW' ? '#065F46' : '#92400E', fontWeight: 700, padding: '0.15rem 0.35rem', borderRadius: '4px' }}>
+                      Sisa: {item.residualRisk}
+                    </span>
+                  </div>
+                </div>
 
-      {/* TAB 3: INTERACTIVE STRETCHING ASSISTANT */}
-      {activeTab === 'stretching' && (
-        <div className="card animate-fade">
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>
-            Asisten Peregangan Otot Interaktif (Micro-Break 3-5 Menit)
-          </h3>
-          <p style={{ fontSize: '0.9rem', color: '#64748B', marginBottom: '1.5rem' }}>
-            Lakukan peregangan singkat 30 detik untuk tiap gerakan di bawah ini untuk melancarkan sirkulasi darah dan mencegah kelelahan otot statis saat bekerja di <i>server room</i>.
-          </p>
-
-          {/* Current Exercise Display Box */}
-          <div style={{
-            backgroundColor: '#F8FAFC',
-            border: '2px solid #059669',
-            borderRadius: '12px',
-            padding: '1.75rem',
-            textAlign: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '0.5rem' }}>
-              {exercises[currentExercise].icon}
-            </div>
-
-            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.5rem' }}>
-              {exercises[currentExercise].title}
-            </h4>
-
-            <p style={{ fontSize: '0.9rem', color: '#475569', maxWidth: '600px', margin: '0 auto 1.5rem auto' }}>
-              {exercises[currentExercise].desc}
-            </p>
-
-            {/* Timer Counter */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100px',
-              height: '100px',
-              borderRadius: '50%',
-              backgroundColor: '#0F172A',
-              color: '#10B981',
-              fontSize: '2.25rem',
-              fontWeight: 800,
-              border: '4px solid #10B981',
-              marginBottom: '1.5rem',
-              boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)'
-            }}>
-              {timerSeconds}s
-            </div>
-
-            {/* Timer Controls */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-              <button
-                onClick={() => setIsTimerRunning(!isTimerRunning)}
-                className="btn-primary"
-                style={{ backgroundColor: isTimerRunning ? '#D97706' : '#059669' }}
-              >
-                {isTimerRunning ? <Pause size={18} /> : <Play size={18} />}
-                <span>{isTimerRunning ? 'Jeda' : 'Mulai Stretching'}</span>
-              </button>
-
-              <button
-                onClick={() => { setTimerSeconds(30); setIsTimerRunning(false); }}
-                className="btn-secondary"
-              >
-                <RotateCcw size={18} />
-                <span>Reset</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Exercise Steps Selector */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1.75rem' }}>
-            {exercises.map((ex, idx) => (
-              <button
-                key={idx}
-                onClick={() => { setCurrentExercise(idx); setTimerSeconds(30); setIsTimerRunning(false); }}
-                style={{
-                  padding: '0.85rem 0.5rem',
-                  borderRadius: '8px',
-                  border: currentExercise === idx ? '2px solid #059669' : '1px solid #E2E8F0',
-                  backgroundColor: currentExercise === idx ? '#ECFDF5' : '#FFFFFF',
-                  color: currentExercise === idx ? '#065F46' : '#334155',
-                  fontWeight: currentExercise === idx ? 700 : 500,
-                  fontSize: '0.8rem',
-                  cursor: 'pointer',
-                  textAlign: 'center'
-                }}
-              >
-                <div>{ex.icon} Gerakan {idx + 1}</div>
-              </button>
+                <div style={{ fontSize: '0.775rem', color: '#475569', lineHeight: 1.4, marginBottom: '0.3rem' }}>
+                  <strong>Bahaya:</strong> {item.hazard}
+                </div>
+                <div style={{ fontSize: '0.775rem', color: '#059669', lineHeight: 1.4, fontWeight: 600 }}>
+                  <strong>Pengendalian:</strong> {item.control}
+                </div>
+              </div>
             ))}
           </div>
 
           <button
-            onClick={() => { markModuleDone('stretching'); onCompleteModules(); }}
+            onClick={() => { markModuleDone('hiradc'); setActiveTab('sop'); }}
             className="btn-primary"
-            style={{ width: '100%', justifyContent: 'center', padding: '1rem', fontSize: '1.05rem' }}
+            style={{ width: '100%', justifyContent: 'center' }}
           >
-            <span>Selesaikan Modul & Lanjut ke Post-Test (Evaluasi Akhir)</span>
-            <ArrowRight size={20} />
+            <span>Pahami HIRADC & Lanjut ke Standar SOP K3</span>
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      )}
+
+      {/* TAB 3: STANDAR OPERASIONAL PROSEDUR (SOP K3 MANUAL HANDLING) */}
+      {activeTab === 'sop' && (
+        <div className="card animate-fade">
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F172A', marginBottom: '0.35rem' }}>
+            Standar Operasional Prosedur (SOP K3 Manual Handling)
+          </h3>
+          <p style={{ fontSize: '0.825rem', color: '#64748B', marginBottom: '1.25rem' }}>
+            Prosedur standar pengangkatan aman server cabinet & perangkat IT Data Center PT. Sinar Powerindo Utama:
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+            {/* Rule 1: Weight Threshold & Team Lifting */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderLeft: '4px solid #EA580C',
+              borderRadius: '8px',
+              padding: '1.1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#EA580C', fontWeight: 800, fontSize: '0.9rem' }}>
+                <Truck size={18} />
+                <span>1. Ambang Batas Beban & Pengangkatan Berkelompok (Team Lifting)</span>
+              </div>
+              <ul style={{ fontSize: '0.825rem', color: '#334155', paddingLeft: '1.2rem', lineHeight: 1.6 }}>
+                <li>Beban individu maksimal &le; 25 kg. Jangan memaksakan mengangkat perangkat berat sendirian.</li>
+                <li>Beban di atas &gt; 25 kg (seperti <i>UPS battery pack / server 4U</i>) <strong>WAJIB diangkat oleh 2 teknisi (Team Lifting)</strong> atau menggunakan meja angkat hidrolik (<i>Server Lift Trolley</i>).</li>
+              </ul>
+            </div>
+
+            {/* Rule 2: APD & Equipment Checklist */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderLeft: '4px solid #059669',
+              borderRadius: '8px',
+              padding: '1.1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#059669', fontWeight: 800, fontSize: '0.9rem' }}>
+                <ShieldCheck size={18} />
+                <span>2. Peralatan & Alat Pelindung Diri (APD) Wajib</span>
+              </div>
+              <ul style={{ fontSize: '0.825rem', color: '#334155', paddingLeft: '1.2rem', lineHeight: 1.6 }}>
+                <li><strong>Sepatu Safety (Anti-Selip):</strong> Mencegah bahaya tergelincir di atas lantai keramik/<i>raised floor</i> Data Center.</li>
+                <li><strong>Sarung Tangan Bintik Karet (*Grip Gloves*):</strong> Memastikan cengkeraman mantap dan mencegah lecet saat memegang sasis logam server.</li>
+              </ul>
+            </div>
+
+            {/* Rule 3: Ergonomic First Aid */}
+            <div style={{
+              backgroundColor: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderLeft: '4px solid #2563EB',
+              borderRadius: '8px',
+              padding: '1.1rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#2563EB', fontWeight: 800, fontSize: '0.9rem' }}>
+                <AlertCircle size={18} />
+                <span>3. Tanggap Darurat Nyeri Otot & Insiden Ergonomi</span>
+              </div>
+              <ul style={{ fontSize: '0.825rem', color: '#334155', paddingLeft: '1.2rem', lineHeight: 1.6 }}>
+                <li>Hentikan pekerjaan secara instan jika timbul ketegangan otot mendadak atau sensasi kram di pinggang.</li>
+                <li>Istirahat 5-10 menit di area sejuk dan laporkan kendala ke Supervisor K3 PT. Sinar Powerindo Utama.</li>
+              </ul>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              markModuleDone('sop');
+              onCompleteModules();
+            }}
+            className="btn-primary"
+            style={{ width: '100%', justifyContent: 'center', backgroundColor: '#059669' }}
+          >
+            <span>Selesaikan Seluruh Modul & Lanjut ke Post-Test</span>
+            <ArrowRight size={16} />
           </button>
         </div>
       )}

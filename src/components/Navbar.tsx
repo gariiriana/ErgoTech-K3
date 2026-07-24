@@ -1,13 +1,24 @@
-import React from 'react';
-import { Key, CheckCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Key, CheckCircle, UserCheck, LogOut, ShieldCheck, ChevronDown } from 'lucide-react';
 
 interface NavbarProps {
   currentStep: string;
   onOpenAdmin: () => void;
   respondentName?: string;
+  isAdminAuthenticated?: boolean;
+  onAdminLogout?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respondentName }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentStep,
+  onOpenAdmin,
+  respondentName,
+  isAdminAuthenticated = false,
+  onAdminLogout
+}) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const steps = [
     { id: 'demographics', label: '1. Identitas' },
     { id: 'pretest', label: '2. Pre-Test' },
@@ -22,155 +33,297 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
 
   const currentIndex = getStepIndex(currentStep);
 
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <header style={{
       backgroundColor: '#FFFFFF',
       color: '#0F172A',
-      borderBottom: '2px solid #FED7AA',
+      borderBottom: '1px solid #E2E8F0',
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      boxShadow: '0 4px 20px rgba(245, 158, 11, 0.08)'
+      boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
     }}>
-      {/* Top Gradient Orange Accent Line */}
+      {/* Top Accent Line */}
       <div style={{
-        height: '4px',
-        background: 'linear-gradient(90deg, #F59E0B 0%, #EA580C 50%, #D97706 100%)'
+        height: '3px',
+        backgroundColor: '#EA580C'
       }}></div>
 
-      {/* Top Corporate Branding Bar */}
-      <div style={{
+      {/* Top Corporate Branding Bar (Single Row, Never Wraps) */}
+      <div className="navbar-container" style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '0.85rem 1.5rem',
+        padding: '0.75rem 1.25rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '1rem'
+        gap: '0.5rem'
       }}>
-        {/* Left Branding: Company Logo + ErgoTech K3 Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            padding: '0.35rem 0.65rem',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            border: '1px solid #FED7AA',
-            boxShadow: '0 2px 8px rgba(245, 158, 11, 0.1)'
-          }}>
+        {/* Left Branding: Clean Transparent Company Logo + URINDO Logo + ErgoTech K3 Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
             <img 
               src="/logo-powerindo.png" 
               alt="PT Sinar Powerindo Utama Logo" 
-              style={{ height: '36px', objectFit: 'contain' }}
+              className="navbar-logo-img"
+              style={{ height: '34px', objectFit: 'contain' }}
+            />
+            <img 
+              src="/logo-urindo-official.png" 
+              alt="Universitas Respati Indonesia Logo" 
+              style={{ height: '32px', objectFit: 'contain' }}
             />
           </div>
-          <div style={{ borderLeft: '2px solid #FED7AA', paddingLeft: '1rem' }}>
-            <h1 style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0, color: '#0F172A' }}>
-              ErgoTech <span style={{
-                background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>K3</span>
+          <div className="navbar-branding-divider" style={{ borderLeft: '1px solid #E2E8F0', paddingLeft: '0.6rem' }}>
+            <h1 className="navbar-title" style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: '#0F172A', lineHeight: 1.1, whiteSpace: 'nowrap' }}>
+              ErgoTech <span style={{ color: '#EA580C' }}>K3</span>
             </h1>
-            <p style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '1px', fontWeight: 500 }}>
+            <p className="navbar-subtitle" style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '1px', fontWeight: 500 }}>
               Manual Handling & Ergonomic Safety — PT. Sinar Powerindo Utama
             </p>
           </div>
         </div>
 
-        {/* Right Status Controls & Admin Trigger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        {/* Right Controls & Profile Avatar Dropdown */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
           {respondentName && (
-            <div style={{ fontSize: '0.85rem', color: '#334155', fontWeight: 600 }}>
+            <div className="respondent-greeting" style={{ fontSize: '0.825rem', color: '#334155', fontWeight: 600 }}>
               Halo, <span style={{ color: '#EA580C', fontWeight: 800 }}>{respondentName}</span>
             </div>
           )}
 
-          {/* Admin Panel Access Button */}
-          <button
-            onClick={onOpenAdmin}
-            style={{
-              backgroundColor: '#FFF7ED',
-              border: '1.5px solid #FDBA74',
-              color: '#EA580C',
-              padding: '0.45rem 0.95rem',
-              borderRadius: '8px',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 2px 6px rgba(234, 88, 12, 0.1)'
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#F59E0B', e.currentTarget.style.color = '#FFFFFF')}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#FFF7ED', e.currentTarget.style.color = '#EA580C')}
-            title="Akses Dashboard Peneliti / Admin"
-          >
-            <Key size={14} />
-            <span>Peneliti</span>
-          </button>
+          {/* Admin Profile Dropdown (If Logged In) or Login Trigger (If Logged Out) */}
+          {isAdminAuthenticated ? (
+            <div ref={dropdownRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '20px',
+                  padding: '0.25rem 0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+                title="Menu Admin Nur Virgi"
+              >
+                <div style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  backgroundColor: '#EA580C',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  flexShrink: 0
+                }}>
+                  NV
+                </div>
+                <div className="profile-text-full" style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '0.775rem', fontWeight: 700, color: '#0F172A', lineHeight: 1.1 }}>
+                    Nur Virgi
+                  </div>
+                </div>
+                <ChevronDown size={14} color="#64748B" style={{ transform: showDropdown ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }} />
+              </button>
+
+              {/* Profile Dropdown Menu */}
+              {showDropdown && (
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  right: 0,
+                  width: '210px',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '8px',
+                  border: '1px solid #E2E8F0',
+                  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)',
+                  padding: '0.65rem',
+                  zIndex: 200,
+                  animation: 'fadeIn 0.15s ease-out'
+                }}>
+                  <div style={{ paddingBottom: '0.5rem', marginBottom: '0.5rem', borderBottom: '1px solid #F1F5F9' }}>
+                    <div style={{ fontSize: '0.825rem', fontWeight: 800, color: '#0F172A' }}>
+                      Nur Virgi Arfiyanti
+                    </div>
+                    <div style={{ fontSize: '0.725rem', color: '#64748B' }}>
+                      Peneliti Skripsi K3 URINDO
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      onOpenAdmin();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.5rem 0.6rem',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: currentStep === 'admin' ? '#F8FAFC' : 'transparent',
+                      color: currentStep === 'admin' ? '#EA580C' : '#334155',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      marginBottom: '0.25rem'
+                    }}
+                  >
+                    <ShieldCheck size={15} />
+                    <span>Dashboard Rekap</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowDropdown(false);
+                      if (onAdminLogout) onAdminLogout();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.5rem 0.6rem',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: '#FEF2F2',
+                      color: '#DC2626',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '0.8rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem'
+                    }}
+                  >
+                    <LogOut size={15} />
+                    <span>Logout Admin</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={onOpenAdmin}
+              style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E2E8F0',
+                color: '#EA580C',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '6px',
+                fontSize: '0.775rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.15s ease'
+              }}
+              title="Akses Dashboard Peneliti / Admin"
+            >
+              <Key size={13} />
+              <span>Peneliti</span>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Steps Navigation Progress Line */}
       {currentStep !== 'admin' && (
         <div style={{
-          backgroundColor: '#FFF7ED',
-          borderTop: '1px solid #FFEDD5',
-          padding: '0.65rem 1.5rem'
+          backgroundColor: '#F8FAFC',
+          borderTop: '1px solid #E2E8F0',
+          padding: '0.45rem 1rem'
         }}>
-          <div style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            overflowX: 'auto',
-            gap: '1rem'
-          }}>
-            {steps.map((step, idx) => {
-              const isCompleted = idx < currentIndex;
-              const isCurrent = idx === currentIndex;
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            {/* Desktop Step List */}
+            <div className="steps-desktop">
+              {steps.map((step, idx) => {
+                const isCompleted = idx < currentIndex;
+                const isCurrent = idx === currentIndex;
 
-              return (
-                <div
-                  key={step.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    fontSize: '0.825rem',
-                    fontWeight: isCurrent ? 800 : isCompleted ? 700 : 500,
-                    color: isCurrent ? '#EA580C' : isCompleted ? '#C2410C' : '#94A3B8',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  {isCompleted ? (
-                    <CheckCircle size={16} color="#EA580C" />
-                  ) : (
-                    <span style={{
-                      width: '20px',
-                      height: '20px',
-                      borderRadius: '50%',
-                      background: isCurrent ? 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)' : '#E2E8F0',
-                      color: isCurrent ? '#FFFFFF' : '#64748B',
-                      display: 'inline-flex',
+                return (
+                  <div
+                    key={step.id}
+                    style={{
+                      display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.75rem',
-                      fontWeight: 800
-                    }}>
-                      {idx + 1}
-                    </span>
-                  )}
-                  <span>{step.label}</span>
-                </div>
-              );
-            })}
+                      gap: '0.4rem',
+                      fontSize: '0.8rem',
+                      fontWeight: isCurrent ? 800 : isCompleted ? 700 : 500,
+                      color: isCurrent ? '#EA580C' : isCompleted ? '#334155' : '#94A3B8',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {isCompleted ? (
+                      <CheckCircle size={15} color="#EA580C" />
+                    ) : (
+                      <span style={{
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        backgroundColor: isCurrent ? '#EA580C' : '#E2E8F0',
+                        color: isCurrent ? '#FFFFFF' : '#64748B',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.7rem',
+                        fontWeight: 800
+                      }}>
+                        {idx + 1}
+                      </span>
+                    )}
+                    <span>{step.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Mobile Zero-Scroll Step Bar */}
+            <div className="steps-mobile">
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0F172A' }}>
+                <span style={{ color: '#EA580C' }}>Tahap {currentIndex >= 0 ? currentIndex + 1 : 1}/5:</span> {steps[currentIndex >= 0 ? currentIndex : 0]?.label.replace(/^[0-9]+\.\s*/, '')}
+              </div>
+
+              {/* Compact 5 Step Dots */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                {steps.map((s, idx) => {
+                  const isCompleted = idx < currentIndex;
+                  const isCurrent = idx === currentIndex;
+                  return (
+                    <span
+                      key={s.id}
+                      style={{
+                        width: isCurrent ? '16px' : '7px',
+                        height: '7px',
+                        borderRadius: '4px',
+                        backgroundColor: isCurrent ? '#EA580C' : isCompleted ? '#F59E0B' : '#CBD5E1',
+                        transition: 'all 0.15s ease'
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}

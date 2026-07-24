@@ -15,3 +15,7 @@ build/
 
 # Temporary Word lock files
 ~$*.docx
+
+# Firebase
+.firebase/
+
