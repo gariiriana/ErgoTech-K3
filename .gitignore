@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production output
+dist/
+build/
+
+# IDE & OS
+.DS_Store
+*.local
+.vscode/
+.idea/
+*.log
+
+# Temporary Word lock files
+~$*.docx
