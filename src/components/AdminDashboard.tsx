@@ -27,11 +27,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const [seeding, setSeeding] = useState(false);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
 
+  // Helper to record Admin Login Activity to Firestore Database `admins` collection
+  const logAdminToFirestore = async (adminIdentifier: string, method: string) => {
+    try {
+      await addDoc(collection(db, "admins"), {
+        adminIdentifier,
+        role: "admin_researcher",
+        loginMethod: method,
+        loginTime: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      });
+      console.log("Admin login record saved to Firestore `admins` collection.");
+    } catch (err) {
+      console.error("Error logging admin to Firestore:", err);
+    }
+  };
+
   // Check Firebase Auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
+        logAdminToFirestore(user.email || 'admin@ergotech-k3.com', 'firebase_auth');
         fetchData();
       }
     });
@@ -42,8 +59,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     e.preventDefault();
     setError('');
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
       setIsAuthenticated(true);
+      await logAdminToFirestore(userCredential.user.email || email.trim(), 'firebase_auth');
       fetchData();
     } catch (err: any) {
       console.error("Firebase Auth Error:", err);
@@ -51,10 +69,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     }
   };
 
-  const handlePasscodeLogin = (e: React.FormEvent) => {
+  const handlePasscodeLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (passcode === 'k3urindo2026' || passcode === 'admin' || passcode === '123') {
       setIsAuthenticated(true);
+      await logAdminToFirestore('Nur Virgi Arfiyanti (Passcode Admin)', 'passcode');
       fetchData();
     } else {
       setError('Passcode salah. Gunakan: k3urindo2026');
@@ -400,9 +419,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         </div>
 
         <div className="card" style={{ padding: '1.25rem', backgroundColor: '#ECFDF5', borderColor: '#A7F3D0' }}>
-          <div style={{ fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>ENKRIPSI FIRESTORE</div>
+          <div style={{ fontSize: '0.8rem', color: '#065F46', fontWeight: 700 }}>ADMIN FIRESTORE LOGS</div>
           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#047857', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <CheckCircle2 size={16} /> Base64 Encoded Stream
+            <CheckCircle2 size={16} /> Saved to `admins` Collection
           </div>
         </div>
       </div>
