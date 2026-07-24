@@ -15,11 +15,8 @@ interface AdminDashboardProps {
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Login Mode: 'email' or 'passcode'
-  const [loginMode, setLoginMode] = useState<'email' | 'passcode'>('email');
-  const [email, setEmail] = useState('');
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
 
   const [respondents, setRespondents] = useState<RespondentData[]>([]);
@@ -37,7 +34,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
         loginTime: new Date().toISOString(),
         userAgent: navigator.userAgent
       });
-      console.log("Admin login record saved to Firestore `admins` collection.");
     } catch (err) {
       console.error("Error logging admin to Firestore:", err);
     }
@@ -55,29 +51,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
-      setIsAuthenticated(true);
-      await logAdminToFirestore(userCredential.user.email || email.trim(), 'firebase_auth');
-      fetchData();
-    } catch (err: any) {
-      console.error("Firebase Auth Error:", err);
-      setError('Gagal login: ' + (err.message || 'Email atau password salah.'));
-    }
-  };
 
-  const handlePasscodeLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passcode === 'k3urindo2026' || passcode === 'admin' || passcode === '123') {
+    const inputVal = usernameOrEmail.trim();
+
+    // 1. Quick Passcode Login Check
+    if (inputVal === 'k3urindo2026' || inputVal === 'admin' || password === 'k3urindo2026') {
       setIsAuthenticated(true);
       await logAdminToFirestore('Nur Virgi Arfiyanti (Passcode Admin)', 'passcode');
       fetchData();
-    } else {
-      setError('Passcode salah. Gunakan: k3urindo2026');
+      return;
     }
+
+    // 2. Firebase Auth Email & Password Login
+    if (inputVal.includes('@')) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, inputVal, password);
+        setIsAuthenticated(true);
+        await logAdminToFirestore(userCredential.user.email || inputVal, 'firebase_auth');
+        fetchData();
+        return;
+      } catch (err: any) {
+        console.error("Firebase Auth Error:", err);
+        setError('Gagal login: Email atau password Firebase tidak sesuai.');
+        return;
+      }
+    }
+
+    setError('Mohon masukkan Email Admin Firebase atau Passcode: k3urindo2026');
   };
 
   const handleLogout = async () => {
@@ -223,7 +226,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
 
   if (!isAuthenticated) {
     return (
-      <div className="animate-fade" style={{ maxWidth: '460px', margin: '3rem auto', padding: '0 1rem' }}>
+      <div className="animate-fade" style={{ maxWidth: '440px', margin: '3.5rem auto', padding: '0 1rem' }}>
         <div className="card">
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <div style={{
@@ -243,46 +246,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
               Akses Admin / Peneliti
             </h3>
             <p style={{ fontSize: '0.85rem', color: '#64748B' }}>
-              Login Peneliti (Nur Virgi Arfiyanti) via Firebase Auth / Passcode
+              Login Peneliti (Nur Virgi Arfiyanti) untuk Kelola Data Firestore
             </p>
-          </div>
-
-          {/* Mode Tabs */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', backgroundColor: '#F1F5F9', padding: '4px', borderRadius: '8px' }}>
-            <button
-              type="button"
-              onClick={() => { setLoginMode('email'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '0.5rem',
-                borderRadius: '6px',
-                border: 'none',
-                backgroundColor: loginMode === 'email' ? '#FFFFFF' : 'transparent',
-                fontWeight: loginMode === 'email' ? 700 : 500,
-                color: loginMode === 'email' ? '#0F172A' : '#64748B',
-                cursor: 'pointer',
-                fontSize: '0.85rem'
-              }}
-            >
-              Firebase Email
-            </button>
-            <button
-              type="button"
-              onClick={() => { setLoginMode('passcode'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '0.5rem',
-                borderRadius: '6px',
-                border: 'none',
-                backgroundColor: loginMode === 'passcode' ? '#FFFFFF' : 'transparent',
-                fontWeight: loginMode === 'passcode' ? 700 : 500,
-                color: loginMode === 'passcode' ? '#0F172A' : '#64748B',
-                cursor: 'pointer',
-                fontSize: '0.85rem'
-              }}
-            >
-              Quick Passcode
-            </button>
           </div>
 
           {error && (
@@ -291,65 +256,41 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBack }) => {
             </div>
           )}
 
-          {loginMode === 'email' ? (
-            <form onSubmit={handleEmailLogin}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                  Email Admin Firebase
-                </label>
-                <input
-                  type="email"
-                  placeholder="admin@ergotech-k3.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem' }}
-                />
-              </div>
+          <form onSubmit={handleLoginSubmit}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+                Email Admin / Passcode
+              </label>
+              <input
+                type="text"
+                placeholder="Email Admin atau Passcode"
+                value={usernameOrEmail}
+                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem', outline: 'none' }}
+              />
+            </div>
 
-              <div style={{ marginBottom: '1.25rem' }}>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                  Password Admin
-                </label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem' }}
-                />
-              </div>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+                Password (Jika Menggunakan Email Firebase)
+              </label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.95rem', outline: 'none' }}
+              />
+            </div>
 
-              <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                <span>Login Firebase Auth</span>
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handlePasscodeLogin}>
-              <div style={{ marginBottom: '1.25rem' }}>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
-                  Passcode Peneliti
-                </label>
-                <input
-                  type="password"
-                  placeholder="k3urindo2026"
-                  value={passcode}
-                  onChange={(e) => setPasscode(e.target.value)}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '1rem' }}
-                />
-                <span style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '4px', display: 'block' }}>
-                  *Passcode default: <code>k3urindo2026</code>
-                </span>
-              </div>
+            <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+              <span>Login Dashboard Admin</span>
+            </button>
 
-              <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                <span>Buka Dashboard Rekap</span>
-              </button>
-            </form>
-          )}
-
-          <button type="button" onClick={onBack} className="btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: '0.75rem' }}>
-            Kembali ke Aplikasi
-          </button>
+            <button type="button" onClick={onBack} className="btn-secondary" style={{ width: '100%', justifyContent: 'center', marginTop: '0.75rem' }}>
+              Kembali ke Aplikasi
+            </button>
+          </form>
         </div>
       </div>
     );

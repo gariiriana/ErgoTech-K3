@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Key, CheckCircle, Database } from 'lucide-react';
+import { Shield, Key, CheckCircle } from 'lucide-react';
 
 interface NavbarProps {
   currentStep: string;
@@ -74,29 +74,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
 
         {/* Right Status Controls & Admin Trigger */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          {/* Firebase Status Badge */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            backgroundColor: '#1E293B',
-            padding: '0.35rem 0.75rem',
-            borderRadius: '50px',
-            fontSize: '0.75rem',
-            color: '#CBD5E1',
-            border: '1px solid #334155'
-          }}>
-            <Database size={13} color="#10B981" />
-            <span>Firebase Sync</span>
-            <span style={{
-              width: '6px',
-              height: '6px',
-              backgroundColor: '#10B981',
-              borderRadius: '50%',
-              display: 'inline-block'
-            }}></span>
-          </div>
-
           {respondentName && (
             <div style={{ fontSize: '0.85rem', color: '#E2E8F0', fontWeight: 500 }}>
               Halo, <span style={{ color: '#10B981', fontWeight: 700 }}>{respondentName}</span>
