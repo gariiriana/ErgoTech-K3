@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Key, CheckCircle } from 'lucide-react';
+import { Key, CheckCircle } from 'lucide-react';
 
 interface NavbarProps {
   currentStep: string;
@@ -67,16 +67,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep, onOpenAdmin, respon
             />
           </div>
           <div style={{ borderLeft: '2px solid #FED7AA', paddingLeft: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Shield size={22} color="#EA580C" />
-              <h1 style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0, color: '#0F172A' }}>
-                ErgoTech <span style={{
-                  background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}>K3</span>
-              </h1>
-            </div>
+            <h1 style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', margin: 0, color: '#0F172A' }}>
+              ErgoTech <span style={{
+                background: 'linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>K3</span>
+            </h1>
             <p style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '1px', fontWeight: 500 }}>
               Manual Handling & Ergonomic Safety — PT. Sinar Powerindo Utama
             </p>
